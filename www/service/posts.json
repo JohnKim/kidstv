@@ -1,0 +1,58 @@
+[
+  {
+    "uid": 1,
+    "text" : "Have you heard about the Web Components revolution?",
+    "username" : "Eric",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 2,
+    "text" : "Loving this Polymer thing.",
+    "username" : "Rob",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+    {
+    "uid": 3,
+    "text" : "So last year...",
+    "username" : "Dimitri",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 4,
+    "text" : "Pretty sure I came up with that first.",
+    "username" : "Ada",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 5,
+    "text" : "Yo, I heard you like components, so I put a component in your component.",
+    "username" : "Grace",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 6,
+    "text" : "Centralize, centrailize.",
+    "username" : "John",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 7,
+    "text" : "Has anyone seen my cat?",
+    "username" : "Zelda",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  },
+  {
+    "uid": 8,
+    "text" : "Decentralize!",
+    "username" : "Norbert",
+    "avatar" : "https://scontent-b.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/1846_1400056483598887_38767870_n.jpg?oh=66b63644d9233afb49b1f8beb671bd77&oe=54D0582A",
+    "favorite": false
+  }
+]
