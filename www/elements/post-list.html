@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/loading-wave/loading-wave.html">
+<link rel="import" href="../service/post-service.html">
+<link rel="import" href="../elements/post-card.html">
+
+
+<polymer-element name="post-list" attributes="show">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    post-card {
+      margin-bottom: 5px;
+    }
+
+
+
+    ul {
+      padding-left: 0;
+      list-style-type: none;
+    }
+
+    </style>
+
+    <post-service id="service" posts="{{posts}}"></post-service>
+
+    <div layout vertical>
+
+      <ul>
+      <template repeat="{{post in posts}}">
+        <post-card
+          favorite="{{post.favorite}}"
+          on-favorite-tap="{{handleFavorite}}">
+
+          <img src="{{post.snippet.thumbnails.default.url}}" width="90" height="90">
+          <h2>{{post.snippet.title}}</h2>
+          <p>{{post.snippet.description}}</p>
+        </post-card>
+      </template>
+    </ul>
+
+      <loading-wave background="white" center ></loading-wave>
+    </div>
+
+
+
+  </template>
+
+
+
+  <script>
+  Polymer({
+    ready: function() {
+
+    },
+    retrieve: function(channelId){
+      this.$.service.retrievePosts(channelId);
+    },
+    handleFavorite: function(event, detail, sender) {
+      var post = sender.templateInstance.model.post;
+      this.$.service.setFavorite(post.uid, post.favorite);
+    }
+  });
+  </script>
+</polymer-element>
