@@ -21,7 +21,6 @@
       this.menus = [];
     },
     postsLoaded: function() {
-      console.log(this.$.ajax.response);
       this.menus = this.$.ajax.response.slice(0);
       this.fire('load-completed');
     }

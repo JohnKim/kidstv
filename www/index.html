@@ -29,7 +29,17 @@
     background-color: #E5E5E5;
     font-family: 'RobotoDraft',Helvetica,Arial,sans-serif;
   }
+  </style>
 
+</head>
+
+<body unresolved>
+
+<main-app></main-app>
+
+<polymer-element name="main-app" >
+<template>
+  <style>
   core-header-panel {
     background: white;
     -webkit-overflow-scrolling: touch;
@@ -109,11 +119,6 @@
   }
 
   </style>
-
-</head>
-
-<body unresolved>
-
   <core-drawer-panel id="drawerPanel">
 
     <core-header-panel drawer id='nav'>
@@ -134,10 +139,10 @@
 
   </core-header-panel>
 
-  <core-header-panel main mode="waterfall-tall" tallClass="medium-tall">
+  <core-header-panel main mode="waterfall-tall" tallClass="medium-tall" on-scroll="{{scrollHandler}}">
 
     <core-toolbar id="mainheader">
-      <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
+      <paper-icon-button id="navicon" icon="menu" on-tap="{{menuClicked}}"></paper-icon-button>
       <span id="postTitle" flex></span>
       <paper-icon-button icon="refresh"></paper-icon-button>
       <paper-icon-button icon="favorite"></paper-icon-button>
@@ -154,16 +159,34 @@
 
 </core-drawer-panel>
 
+</template>
 <script>
+Polymer('main-app', {
+  ready: function() {
+    console.log('dafadsf');
+  },
+  menuClicked: function(event) {
+    document.querySelector('core-drawer-panel').togglePanel();
+  },
+  scrollHandler: function(event) {
+    var scroller = event.detail.target;
+    console.log(scroller.scrollTop);
+    console.log(scroller);
+  }
+});
+
+</script>
+</polymer-element>
+
+
+<script>
+
 document.addEventListener('polymer-ready', function() {
 
-  var navicon = document.getElementById('navicon');
-  var drawerPanel = document.getElementById('drawerPanel');
-  navicon.addEventListener('click', function() {
-    drawerPanel.togglePanel();
-  });
+
 
 });
+
 
 function retrieveList(data){
 
@@ -177,8 +200,6 @@ function retrieveList(data){
   postList.retrieve(data.channelId);
 
 }
-
 </script>
-
 </body>
 </html>
