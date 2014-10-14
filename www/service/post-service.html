@@ -36,7 +36,7 @@
         "part": "snippet",
         "channelId": this.channelId,
         "key": this.key,
-        "maxResults": 20
+        "maxResults": 50
       };
 
       if( isNext && this.page.nextPageToken ){
@@ -49,12 +49,43 @@
       this.$.ajax.go();
     },
     postsLoaded: function() {
-      this.posts = this.$.ajax.response.items;
+
+      var results = this.$.ajax.response.items;
+
+      for (var i in results) {
+        this.posts.push({
+          id: results[i].id.videoId,
+          title: results[i].snippet.title,
+          description: results[i].snippet.description,
+          image: results[i].snippet.thumbnails.default.url
+        });
+      }
+
+            for (var i in results) {
+              this.posts.push({
+                id: results[i].id.videoId,
+                title: results[i].snippet.title,
+                description: results[i].snippet.description,
+                image: results[i].snippet.thumbnails.default.url
+              });
+            }
+
+                  for (var i in results) {
+                    this.posts.push({
+                      id: results[i].id.videoId,
+                      title: results[i].snippet.title,
+                      description: results[i].snippet.description,
+                      image: results[i].snippet.thumbnails.default.url
+                    });
+                  }
+
       this.page = {
         "nextPageToken": this.$.ajax.response.nextPageToken,
         "totalResults": this.$.ajax.response.pageInfo.totalResults,
         "resultsPerPage": this.$.ajax.response.pageInfo.resultsPerPage
       };
+
+
       console.log(this.page);
       console.log(this.posts);
     }

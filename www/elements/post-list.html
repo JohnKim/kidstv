@@ -4,7 +4,7 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../service/post-service.html">
 
-<polymer-element name="post-list"  ><!-- layout  vertical -->
+<polymer-element name="post-list" layout  vertical><!-- layout  vertical -->
   <template>
     <style>
     :host {
@@ -13,81 +13,100 @@
       height: 100%;
       overflow: hidden;
     }
-    
+
     core-list {
       overflow: hidden;
     }
-    
-    
+
     post-card {
       margin-bottom: 5px;
     }
-    
+
     .item {
       box-sizing: border-box;
       height: 80px;
-      border-bottom: 1px solid #ddd;
       padding: 4px;
-      cursor: default;
       background-color: white;
       overflow: hidden;
     }
-    
-    
+
+
     h2 {
       margin: 0;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      padding-right: 30px;
-      padding-top: 15px;
+      padding-right: 35px;
+      padding-top: 8px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
-img {
+
+    img {
       float: left;
       margin: 5px;
-      width: 90px;
+      width: 70px;
       border-radius: 50%;
-      padding-right: 8px;
+      padding-right: 4px;
+    }
+
+    p {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      padding-right: 30px;
+      margin-top: 1px;
+      font-size: 12px;
+    }
+
+
+    paper-icon-button {
+      position: absolute;
+      top: 5px;
+      right: 1px;
+      color: #919191;
     }
 
     </style>
 
     <post-service id="service" posts="{{posts}}"></post-service>
-    
-    
+
     <core-list id="list" data="{{posts}}" selectionEnabled="{{selectionEnabled}}"
     selection="{{selection}}" height="80" flex multi?={{multi}} on-scroll="{{scrollEventHandler}}">
-    
-      
+
       <template>
         <div class="item {{ {selected: selected} | tokenList }}">
           <div id="idx_{{index}}" class="message">
-            <p>ABCEDE</p>
-            <!-- img src="{{model.image}}" width="70" height="70" on-tap="{{openWindow}}">
-            <h2>AAA {{model.title}}</h2>
+            <img src="{{model.image}}" width="70" height="70" data-videoId="{{model.id}}" on-tap="{{openWindow}}">
+            <h2 data-videoId="{{model.id}}" on-tap="{{openWindow}}">{{model.title}}</h2>
             <p>{{model.description}}</p>
             <paper-icon-button
               id="favicon"
               icon="favorite"
               on-tap="{{favoriteTapped}}">
-            </paper-icon-button -->
-            
+            </paper-icon-button>
+
           </div>
         </div>
       </template>
-      
+
       <div>
         <loading-wave background="white" center ></loading-wave>
       </div>
 
     </core-list>
-    
+
   </template>
 
 
 
   <script>
-  
-  
+
+
   Polymer('post-list', {
     selectionEnabled: true,
     multi: false,
@@ -95,18 +114,19 @@ img {
     ready: function() {
       this.posts = [];
     },
-    
+
     scrollEventHandler: function(event) {
       var firstVisibleIndex = Math.floor(this.$.list._scrollTop / this.$.list.height);
       var visibleMidpoint = firstVisibleIndex + this.$.list._visibleCount / 2;
+
       console.log(firstVisibleIndex, visibleMidpoint, Math.max(0, Math.floor(visibleMidpoint - this.$.list._physicalCount / 2)));
 
       if(visibleMidpoint > 90 && visibleMidpoint < 100){
       }
     },
-    
-    openWindow: function() {
-      var url = "http://www.youtube.com/embed/"+selection.id+"?enablejsapi=1&loop=1&autoplay=1";
+
+    openWindow: function(event, cn, el) {
+      var url = "http://www.youtube.com/embed/" + el.getAttribute('data-videoId') + "?enablejsapi=1&loop=1&autoplay=1";
       var iab = window.open(url, '_blank', 'location=no,EnableViewPortScale=yes');
 
       if (!iab) {
@@ -114,11 +134,16 @@ img {
       }
 
     },
-    
+
+    favoriteTapped: function(event, detail, sender) {
+      this.favorite = !this.favorite;
+      this.fire('favorite-tap');
+    },
+
     retrieve: function(channelId){
       this.$.service.retrievePosts(channelId);
     },
-    
+
     handleFavorite: function(event, detail, sender) {
       var post = sender.templateInstance.model.post;
       this.$.service.setFavorite(post.uid, post.favorite);
