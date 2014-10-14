@@ -1,0 +1,64 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="post-service" attributes="posts">
+  <template>
+    <style>
+    :host {
+      display: none;
+    }
+    </style>
+
+    <core-ajax
+      id="ajax"
+      url="https://www.googleapis.com/youtube/v3/search"
+      params={{params}}
+      on-core-response="{{postsLoaded}}"
+      handleAs="json">
+    </core-ajax>
+
+  </template>
+
+  <script>
+
+  /* https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCLF-kfM8ZxHQ9lW_lpu_thw&maxResults=20&order=date&key= */
+
+  Polymer('post-service', {
+    key: "AIzaSyBzPlhId4iNQt8Z3Y2wBDV3YU_w43xBeLU",
+    created: function() {
+      this.posts = [];
+      this.pageInfo = {};
+    },
+    retrievePosts: function(channelId, isNext) {
+
+      this.channelId = channelId;
+      this.params = {
+        "part": "snippet",
+        "channelId": this.channelId,
+        "key": this.key,
+        "maxResults": 20
+      };
+
+      if( isNext && this.page.nextPageToken ){
+        this.params.pageToken = this.page.nextPageToken;
+      }else{
+        this.posts = [];
+        window.scrollTo(0, 0);
+      }
+
+      this.$.ajax.go();
+    },
+    postsLoaded: function() {
+      this.posts = this.$.ajax.response.items;
+      this.page = {
+        "nextPageToken": this.$.ajax.response.nextPageToken,
+        "totalResults": this.$.ajax.response.pageInfo.totalResults,
+        "resultsPerPage": this.$.ajax.response.pageInfo.resultsPerPage
+      };
+      console.log(this.page);
+      console.log(this.posts);
+    }
+  });
+  </script>
+
+</polymer-element>

@@ -28,18 +28,16 @@
     margin: 0;
     background-color: #E5E5E5;
     font-family: 'RobotoDraft',Helvetica,Arial,sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
   }
-  </style>
 
-</head>
-
-<body unresolved>
-
-<main-app></main-app>
-
-<polymer-element name="main-app" >
-<template>
-  <style>
+post-list {
+      display: block;
+      height: 100%;
+      margin: 0 auto;
+    }
+    
   core-header-panel {
     background: white;
     -webkit-overflow-scrolling: touch;
@@ -56,7 +54,6 @@
     background-color: #EEE;
     color: #444;
   }
-
 
   #mainheader {
     background-color: #3e50b4 !important;
@@ -119,6 +116,11 @@
   }
 
   </style>
+
+</head>
+
+<body unresolved>
+
   <core-drawer-panel id="drawerPanel">
 
     <core-header-panel drawer id='nav'>
@@ -139,54 +141,35 @@
 
   </core-header-panel>
 
-  <core-header-panel main mode="waterfall-tall" tallClass="medium-tall" on-scroll="{{scrollHandler}}">
+  <core-header-panel main mode="waterfall-tall" tallClass="medium-tall">
 
     <core-toolbar id="mainheader">
-      <paper-icon-button id="navicon" icon="menu" on-tap="{{menuClicked}}"></paper-icon-button>
+      <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
       <span id="postTitle" flex></span>
       <paper-icon-button icon="refresh"></paper-icon-button>
       <paper-icon-button icon="favorite"></paper-icon-button>
-      <div id="postDescription" class="middle indent">
+      <div id="postDescription" class="middle indent" >
       </div>
       <!-- div class="bottom indent">Bottom Title</div -->
     </core-toolbar>
-    <div class="content">
-
+    
+    
       <post-list></post-list>
-
-    </div>
+    
   </core-header-panel>
 
 </core-drawer-panel>
 
-</template>
 <script>
-Polymer('main-app', {
-  ready: function() {
-    console.log('dafadsf');
-  },
-  menuClicked: function(event) {
-    document.querySelector('core-drawer-panel').togglePanel();
-  },
-  scrollHandler: function(event) {
-    var scroller = event.detail.target;
-    console.log(scroller.scrollTop);
-    console.log(scroller);
-  }
-});
-
-</script>
-</polymer-element>
-
-
-<script>
-
 document.addEventListener('polymer-ready', function() {
 
-
+  var navicon = document.getElementById('navicon');
+  var drawerPanel = document.getElementById('drawerPanel');
+  navicon.addEventListener('click', function() {
+    drawerPanel.togglePanel();
+  });
 
 });
-
 
 function retrieveList(data){
 
@@ -200,6 +183,8 @@ function retrieveList(data){
   postList.retrieve(data.channelId);
 
 }
+
 </script>
+
 </body>
 </html>
