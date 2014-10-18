@@ -1,10 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/loading-wave/loading-wave.html">
 <link rel="import" href="../bower_components/core-list/core-list.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html" >
 <link rel="import" href="../service/post-service.html">
+<link rel="import" href="../elements/loading-wave.html">
 
-<polymer-element name="post-list" layout vertical>
+<polymer-element name="post-list" attributes="toolbarClass" layout vertical>
   <template>
   <style>
 
@@ -55,8 +57,8 @@
     padding-right: 30px;
     margin-top: 1px;
     font-size: 12px;
+    font-weight: lighter;
   }
-
 
   paper-icon-button {
     position: absolute;
@@ -64,31 +66,34 @@
     right: 1px;
     color: #919191;
   }
-
-
   </style>
 
-  <post-service id="service" posts="{{posts}}"></post-service>
+  <post-service id="service" posts="{{posts}}" page="{{page}}" loading="{{loading}}" search="{{search}}" on-response-completed="{{loadPostsCompleted}}"></post-service>
 
-  <core-list id="list" data="{{posts}}" selectionEnabled="{{selectionEnabled}}" selection="{{selection}}" height="80" flex
-    multi?={{multi}} on-scroll="{{scrollEventHandler}}">
+  <core-list id="list" data="{{posts}}" selectionEnabled="{{selectionEnabled}}" selection="{{selection}}" height="80" flex multi?={{multi}} on-scroll="{{scrollEventHandler}}">
 
     <template>
       <div class="item">
         <div class="message">
+
           <img src="{{model.image}}" width="70" height="70" data-videoId="{{model.id}}" on-tap="{{openWindow}}">
+
           <h2 data-videoId="{{model.id}}" on-tap="{{openWindow}}">{{model.title}}</h2>
+
           <p>{{model.description}}</p>
-          <paper-icon-button
-            id="favicon"
-            icon="favorite"
-            on-tap="{{favoriteTapped}}">
+
+          <paper-icon-button id="favicon" icon="favorite" on-tap="{{favoriteTapped}}">
           </paper-icon-button>
+
         </div>
       </div>
     </template>
 
   </core-list>
+
+  <paper-toast id="loading" class="capsule" text=" Loading . . ." style="padding-right: 50px; font-size: 20px;">
+    <loading-wave></loading-wave>
+  </paper-toast>
 
 </template>
 <script>
@@ -97,26 +102,68 @@
   Polymer('post-list', {
     selectionEnabled: true,
     multi: false,
+    activeScroll: false,
+    activeScrollCount: 5,
+    loading: false,
 
     ready: function() {
       this.posts = [];
     },
 
-    scrollEventHandler: function(event) {
+    checkScrollStatus: function() {
+      this.activeScrollCount--;
+
       var firstVisibleIndex = Math.floor(this.$.list._scrollTop / this.$.list.height);
       var visibleMidpoint = firstVisibleIndex + this.$.list._visibleCount / 2;
 
-      console.log(this.$.list._scrollTop, firstVisibleIndex, visibleMidpoint, Math.max(0, Math.floor(visibleMidpoint - this.$.list._physicalCount / 2)));
-
-
-      if(visibleMidpoint > 90 && visibleMidpoint < 100){
-      }
-
       if(firstVisibleIndex == 0) {
-        mainScrollEventHandler(firstVisibleIndex);
+        this.toolbarClass = "animate medium-tall";
       }else{
-
+        this.toolbarClass = "animate";
       }
+
+      // page - nextPageToken, totalResults, resultsPerPage
+
+      console.log(visibleMidpoint, this.posts.length, this.posts.length - 10); // Math.ceil((this.posts.length)*0.85));
+      if(this.page.nextPageToken && visibleMidpoint >= (this.posts.length - 10)){ // Math.ceil((this.posts.length)*0.85)
+
+        console.log(' >>>>> ',this.page.nextPageToken, this.lastPageToken, this.loading);
+
+        if(this.page.nextPageToken != this.lastPageToken && !this.loading ) { //  && !this.loading
+          this.lastPageToken = this.page.nextPageToken;
+          this.$.loading.show();
+          this.$.service.retrievePosts(this.channelId, this.lastPageToken);
+        }
+      }
+
+      if(this.activeScrollCount > 0){
+        this.activeScroll = true;
+        this.async(this.checkScrollStatus, null, 500);
+      }else{
+        this.activeScroll = false;
+      }
+    },
+
+    scrollEventHandler: function(event) {
+
+      this.activeScrollCount = 3;
+
+      if( !this.activeScroll ){
+        this.activeScroll = true;
+        this.checkScrollStatus();
+      }
+
+    },
+
+    loadPostsCompleted: function() {
+
+      this.async(function(){
+        this.$.loading.dismiss();
+      }, null, 500);
+
+      //this.async(this.$.loading.dismiss, null, 500);
+      console.log(' >1>> ' ,this.page);
+      console.log(' >2>> ' ,this.posts);
     },
 
     openWindow: function(event, cn, el) {
@@ -126,7 +173,6 @@
       if (!iab) {
         alert('window.open returned ' + iab);
       }
-
     },
 
     favoriteTapped: function(event, detail, sender) {
@@ -134,7 +180,13 @@
       this.fire('favorite-tap');
     },
 
-    retrieve: function(channelId){
+    retrieve: function(channelId, srchValue){
+      this.posts = [];
+      this.page = {};
+      this.search = '';
+      this.lastPageToken = '';
+      this.channelId = channelId;
+      if(srchValue) this.search = srchValue;
       this.$.service.retrievePosts(channelId);
     },
 

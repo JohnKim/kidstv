@@ -10,7 +10,6 @@
   <script src="bower_components/platform/platform.js"></script>
 
   <link rel="import" href="bower_components/font-roboto/roboto.html">
-
   <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
   <link rel="import" href="bower_components/core-menu/core-menu.html">
   <link rel="import" href="bower_components/core-item/core-item.html">
@@ -31,156 +30,262 @@
     -webkit-tap-highlight-color: transparent;
     overflow: hidden;
   }
-
-  post-list {
-    display: block;
-    height: 100%;
-    margin: 0 auto;
-  }
-
-  core-header-panel {
-    background: white;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  #nav {
-    background-color: #EEE;
-    color: #444;
-  }
-  #navheader {
-    background-color: #EEE;
-    color: #444;
-  }
-
-  #mainheader {
-    background-color: #3e50b4 !important;
-    color: #fff;
-  }
-  #mainheader .middle {
-    font-size: 16px;
-  }
-  #mainheader .bottom {
-    font-size: 12px;
-  }
-
-  #postDescription {
-    display: none;
-
-  }
-
-  .medium-tall #postDescription {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-  }
-
-  /* drawer is always visible on a wide screen
-  so menu button isn't required */
-  core-drawer-panel:not([narrow]) #navicon {
-    display: none;
-  }
-
-
-  #logo-container {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: -o-flex;
-    display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -moz-align-items: center;
-    -ms-align-items: center;
-    -o-align-items: center;
-    align-items: center;
-    height: 80px;
-    margin-bottom: 24px;
-    padding-top: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    max-width: 100%;
-  }
-
-  #logo-container img{
-    max-width: 100%;
-  }
-
   </style>
 
 </head>
 
 <body unresolved>
 
-  <core-drawer-panel id="drawerPanel">
+  <main-app></main-app>
 
-    <core-header-panel drawer id='nav'>
+  <polymer-element name="main-app">
+    <template>
+    <style>
+    post-list {
+      display: block;
+      height: 100%;
+      margin: 0 auto;
+    }
 
-      <div id="logo-container" layout="" horizontal="" center="">
-        <a href="/" class="logo"><img src="/logo.png"></a>
-      </div>
+    core-header-panel {
+      background: white;
+      -webkit-overflow-scrolling: touch;
+    }
 
-    <menu-list show="all"></menu-list>
+    #nav {
+      background-color: #EEE;
+      color: #444;
+    }
+    #navheader {
+      background-color: #EEE;
+      color: #444;
+    }
 
-    <hr/>
+    #mainheader {
+      background-color: #3e50b4 !important;
+      color: #fff;
+    }
+    #mainheader .middle {
+      font-size: 16px;
+      font-weight: lighter;
+    }
+    #mainheader .bottom {
+      font-size: 12px;
+    }
+    .h100 {
+      height: 100%;
+    }
 
-  </core-header-panel>
+    #postDescription {
+      display: none;
 
-  <core-header-panel main mode="waterfall-tall" tallClass="medium-tall">
+    }
 
-    <core-toolbar id="mainheader">
-      <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
-      <span id="postTitle" flex></span>
-      <paper-icon-button icon="refresh"></paper-icon-button>
-      <paper-icon-button icon="favorite"></paper-icon-button>
-      <div id="postDescription" class="middle indent" >
-      </div>
-    </core-toolbar>
+    .medium-tall #postDescription {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
 
-    <div fit>
-      <post-list></post-list>
-    </div>
+    core-drawer-panel:not([narrow]) #navicon {
+      display: none;
+    }
 
-  </core-header-panel>
+    #logo-container {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: -o-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      -o-align-items: center;
+      align-items: center;
+      height: 80px;
+      margin-bottom: 24px;
+      padding-top: 16px;
+      padding-left: 16px;
+      padding-right: 16px;
+      max-width: 100%;
+    }
 
-</core-drawer-panel>
+    #logo-container img{
+      max-width: 100%;
+    }
 
-<script>
-document.addEventListener('polymer-ready', function() {
+    .search-on {
+      left:0;
+      background:inherit;
+      z-index:1001;
+    }
 
-  var navicon = document.getElementById('navicon');
-  var drawerPanel = document.getElementById('drawerPanel');
-  navicon.addEventListener('click', function() {
-    drawerPanel.togglePanel();
+    #search {
+      display:flex;
+      -webkit-box-align:center;
+      -webkit-align-items:center;
+      -moz-align-items:center;
+      -ms-align-items:center;
+      -o-align-items:center;
+      align-items:center;
+      -webkit-box-flex:1;
+      -webkit-flex:0 0 auto;
+      -moz-flex:0 0 auto;
+      -ms-flex:0 0 auto;
+      -o-flex:0 0 auto;
+      flex:0 0 auto;
+      width:40px;
+      -moz-box-sizing:border-box;
+      -webkit-box-sizing:border-box;
+      box-sizing:border-box;
+      background-color:inherit;
+    }
+
+    #search[show] {
+      width:100%;
+      height:100%;
+      position:absolute;
+      left:0;
+      top:0;
+      margin-left:0;
+      padding:0 16px;
+    }
+
+    #search[show] input {
+      visibility:visible;
+      padding:10px;
+    }
+
+    input {
+      background-color:inherit;
+      border:none;
+      font-size:20px;
+      outline:none;
+      color:inherit;
+      -webkit-box-flex:1;
+      -webkit-flex:1 0 0;
+      -moz-flex:1 0 0;
+      -ms-flex:1 0 0;
+      -o-flex:1 0 0;
+      flex:1 0 0;
+      visibility:hidden;
+      -webkit-appearance:none;
+      padding:0;
+    }
+
+    </style>
+    <core-drawer-panel id="drawerPanel" unresolved>
+
+      <core-header-panel drawer id='nav'>
+
+        <div id="logo-container" layout="" horizontal="" center="">
+          <img src="/logo.png" class="logo">
+        </div>
+
+        <menu-list menu="{{menu}}" on-menu-tap="{{handleMenu}}"></menu-list>
+
+        <hr/>
+
+      </core-header-panel>
+
+      <core-header-panel main mode="waterfall-tall" tallClass="medium-tall" unresolved>
+
+        <core-toolbar id="mainheader" class="{{toolbarClass}}">
+          <paper-icon-button id="navicon" icon="menu" on-tap="{{clickMenuBtn}}" hidden?="{{showingSearch}}"></paper-icon-button>
+          <span id="postTitle" hidden?="{{showingSearch}}" flex></span>
+
+          <paper-icon-button icon="refresh" hidden?="{{showingSearch || isFirst}}" on-tap="{{reloadPosts}}"></paper-icon-button>
+          <paper-icon-button icon="favorite" hidden?="{{showingSearch || isFirst}}"></paper-icon-button>
+
+          <div hidden?="{{isFirst}}">
+            <div id="search" show?="{{showingSearch}}" on-click="{{toggleSearch}}">
+              <paper-icon-button icon="search"></paper-icon-button>
+              <input type="search" id="inputSearch" on-keyup="{{onKeyPress}}" on-blur="{{inputBlur}}" autocomplete="off">
+            </div>
+          </div>
+          <div id="postDescription" class="middle indent" >
+          </div>
+        </core-toolbar>
+
+        <div fit>
+          <post-list id="postList" toolbarClass="{{toolbarClass}}"></post-list>
+        </div>
+
+      </core-header-panel>
+
+    </core-drawer-panel>
+  </template>
+  <script>
+
+
+  Polymer('main-app', {
+    showingSearch: false,
+    ready: function() {
+      console.log('READY');
+      console.log(this.menu);
+      this.isFirst = true;
+      this.toolbarClass = "animate h100";
+    },
+    clickMenuBtn: function(){
+      this.$.drawerPanel.togglePanel();
+    },
+    handleMenu: function(event, detail, sender) {
+      this.isFirst = false;
+      this.$.postTitle.innerHTML = this.menu.title;
+      this.$.postDescription.innerHTML = this.menu.description;
+      this.$.drawerPanel.togglePanel();
+      this.$.inputSearch.value = '';
+      this.$.postList.retrieve(this.menu.channelId);
+      this.toolbarClass = "animate medium-tall";
+    },
+    toggleSearch: function(e, detail, sender) {
+      if (e) { // comes first
+        e.stopPropagation();
+      }
+      if (e.target === this.$.input) {
+        return;
+      }
+
+      this.showingSearch = !this.showingSearch;
+      this.classList.toggle('search-on');
+      this.async(function() {
+        this.$.inputSearch.focus();
+      });
+    },
+    inputBlur: function () {
+      if(this.showingSearch) this.showingSearch = false;
+    },
+    reloadPosts: function () {
+      this.$.postTitle.innerHTML = this.menu.title;
+      this.$.inputSearch.value = '';
+      this.$.postList.retrieve(this.menu.channelId);
+      this.toolbarClass = "animate medium-tall";
+    },
+    onKeyPress: function(e, detail, sender) {
+      if (e.keyCode == 13) { // Enter
+        if (sender.value) {
+          this.$.postTitle.innerHTML = this.menu.title + " '"+ sender.value +"'";
+          this.$.postList.retrieve(this.menu.channelId, sender.value);
+        }
+      }
+    },
   });
 
-});
 
-function retrieveList(data){
+  document.addEventListener('polymer-ready', function() {
+    console && console.log("%cWelcome to kidsTV!\n%cyoutube collections for kids",
+    "font-size:1.5em;color:#4558c9;", "color:#d61a7f;font-size:1em;");
 
-  document.getElementById('postTitle').innerHTML = data.title;
-  document.getElementById('postDescription').innerHTML = data.description;
+    document.querySelector('main-app').clickMenuBtn();
 
-  var drawerPanel = document.getElementById('drawerPanel');
-  drawerPanel.togglePanel();
+  });
 
-  var postList = document.querySelector('post-list');
-  postList.retrieve(data.channelId);
-
-}
-
-function mainScrollEventHandler(idx, ridx){
-  if ( idx >= 1) {
-
-  }else{
-
-  }
-  console.log(idx, ridx);
-}
-
-</script>
+  </script>
+</polymer-element>
 
 </body>
 </html>

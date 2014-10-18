@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="post-service" attributes="posts">
+<polymer-element name="post-service" attributes="posts page search">
   <template>
     <style>
     :host {
@@ -25,9 +25,11 @@
 
   Polymer('post-service', {
     key: "AIzaSyBzPlhId4iNQt8Z3Y2wBDV3YU_w43xBeLU",
+
     created: function() {
       this.posts = [];
-      this.pageInfo = {};
+      this.page = {};
+      this.loading = false;
     },
     retrievePosts: function(channelId, isNext) {
 
@@ -39,27 +41,20 @@
         "maxResults": 50
       };
 
+      this.params.q = this.search;
+
       if( isNext && this.page.nextPageToken ){
         this.params.pageToken = this.page.nextPageToken;
       }else{
         this.posts = [];
         window.scrollTo(0, 0);
       }
-
+      this.loading = true;
       this.$.ajax.go();
     },
     postsLoaded: function() {
 
-      var results = this.$.ajax.response.items;
-
-      for (var i in results) {
-        this.posts.push({
-          id: results[i].id.videoId,
-          title: results[i].snippet.title,
-          description: results[i].snippet.description,
-          image: results[i].snippet.thumbnails.default.url
-        });
-      }
+      this.loading = false;
 
       this.page = {
         "nextPageToken": this.$.ajax.response.nextPageToken,
@@ -67,9 +62,21 @@
         "resultsPerPage": this.$.ajax.response.pageInfo.resultsPerPage
       };
 
+      if( this.$.ajax.response.pageInfo.totalResults > 0 ) {
+        var results = this.$.ajax.response.items;
 
-      console.log(this.page);
-      console.log(this.posts);
+        for (var i in results) {
+          this.posts.push({
+            id: results[i].id.videoId,
+            title: results[i].snippet.title,
+            description: results[i].snippet.description,
+            image: results[i].snippet.thumbnails.default.url
+          });
+        }
+      }
+
+      this.fire('response-completed');
+
     }
   });
   </script>
