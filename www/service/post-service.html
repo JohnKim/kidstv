@@ -61,24 +61,6 @@
         });
       }
 
-            for (var i in results) {
-              this.posts.push({
-                id: results[i].id.videoId,
-                title: results[i].snippet.title,
-                description: results[i].snippet.description,
-                image: results[i].snippet.thumbnails.default.url
-              });
-            }
-
-                  for (var i in results) {
-                    this.posts.push({
-                      id: results[i].id.videoId,
-                      title: results[i].snippet.title,
-                      description: results[i].snippet.description,
-                      image: results[i].snippet.thumbnails.default.url
-                    });
-                  }
-
       this.page = {
         "nextPageToken": this.$.ajax.response.nextPageToken,
         "totalResults": this.$.ajax.response.pageInfo.totalResults,

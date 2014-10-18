@@ -4,108 +4,95 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../service/post-service.html">
 
-<polymer-element name="post-list" layout  vertical><!-- layout  vertical -->
+<polymer-element name="post-list" layout vertical>
   <template>
-    <style>
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+  <style>
 
-    core-list {
-      overflow: hidden;
-    }
-
-    post-card {
-      margin-bottom: 5px;
-    }
-
-    .item {
-      box-sizing: border-box;
-      height: 80px;
-      padding: 4px;
-      background-color: white;
-      overflow: hidden;
-    }
+  :host {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
 
-    h2 {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 600;
-      padding-right: 35px;
-      padding-top: 8px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      -webkit-line-clamp: 2;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-    }
-
-    img {
-      float: left;
-      margin: 5px;
-      width: 70px;
-      border-radius: 50%;
-      padding-right: 4px;
-    }
-
-    p {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      -webkit-line-clamp: 2;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      padding-right: 30px;
-      margin-top: 1px;
-      font-size: 12px;
-    }
+  .item {
+    box-sizing: border-box;
+    height: 80px;
+    padding: 4px;
+    background-color: white;
+    overflow: hidden;
+  }
 
 
-    paper-icon-button {
-      position: absolute;
-      top: 5px;
-      right: 1px;
-      color: #919191;
-    }
+  h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    padding-right: 35px;
+    padding-top: 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
 
-    </style>
+  img {
+    float: left;
+    margin: 5px;
+    width: 70px;
+    border-radius: 50%;
+    padding-right: 4px;
+  }
 
-    <post-service id="service" posts="{{posts}}"></post-service>
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    padding-right: 30px;
+    margin-top: 1px;
+    font-size: 12px;
+  }
 
-    <core-list id="list" data="{{posts}}" selectionEnabled="{{selectionEnabled}}"
-    selection="{{selection}}" height="80" flex multi?={{multi}} on-scroll="{{scrollEventHandler}}">
 
-      <template>
-        <div class="item {{ {selected: selected} | tokenList }}">
-          <div id="idx_{{index}}" class="message">
-            <img src="{{model.image}}" width="70" height="70" data-videoId="{{model.id}}" on-tap="{{openWindow}}">
-            <h2 data-videoId="{{model.id}}" on-tap="{{openWindow}}">{{model.title}}</h2>
-            <p>{{model.description}}</p>
-            <paper-icon-button
-              id="favicon"
-              icon="favorite"
-              on-tap="{{favoriteTapped}}">
-            </paper-icon-button>
+  paper-icon-button {
+    position: absolute;
+    top: 5px;
+    right: 1px;
+    color: #919191;
+  }
 
-          </div>
+
+  </style>
+
+  <post-service id="service" posts="{{posts}}"></post-service>
+
+  <core-list id="list" data="{{posts}}" selectionEnabled="{{selectionEnabled}}" selection="{{selection}}" height="80" flex
+    multi?={{multi}} on-scroll="{{scrollEventHandler}}">
+
+    <template>
+      <div class="item">
+        <div class="message">
+          <img src="{{model.image}}" width="70" height="70" data-videoId="{{model.id}}" on-tap="{{openWindow}}">
+          <h2 data-videoId="{{model.id}}" on-tap="{{openWindow}}">{{model.title}}</h2>
+          <p>{{model.description}}</p>
+          <paper-icon-button
+            id="favicon"
+            icon="favorite"
+            on-tap="{{favoriteTapped}}">
+          </paper-icon-button>
         </div>
-      </template>
-
-      <div>
-        <loading-wave background="white" center ></loading-wave>
       </div>
+    </template>
 
-    </core-list>
+  </core-list>
 
-  </template>
-
-
-
-  <script>
-
+</template>
+<script>
+(function() {
 
   Polymer('post-list', {
     selectionEnabled: true,
@@ -119,9 +106,16 @@
       var firstVisibleIndex = Math.floor(this.$.list._scrollTop / this.$.list.height);
       var visibleMidpoint = firstVisibleIndex + this.$.list._visibleCount / 2;
 
-      console.log(firstVisibleIndex, visibleMidpoint, Math.max(0, Math.floor(visibleMidpoint - this.$.list._physicalCount / 2)));
+      console.log(this.$.list._scrollTop, firstVisibleIndex, visibleMidpoint, Math.max(0, Math.floor(visibleMidpoint - this.$.list._physicalCount / 2)));
+
 
       if(visibleMidpoint > 90 && visibleMidpoint < 100){
+      }
+
+      if(firstVisibleIndex == 0) {
+        mainScrollEventHandler(firstVisibleIndex);
+      }else{
+
       }
     },
 
@@ -148,6 +142,8 @@
       var post = sender.templateInstance.model.post;
       this.$.service.setFavorite(post.uid, post.favorite);
     }
+
   });
-  </script>
+})();
+</script>
 </polymer-element>

@@ -28,22 +28,19 @@
     margin: 0;
     background-color: #E5E5E5;
     font-family: 'RobotoDraft',Helvetica,Arial,sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
   }
 
-post-list {
-      display: block;
-      height: 100%;
-      margin: 0 auto;
-    }
-    
+  post-list {
+    display: block;
+    height: 100%;
+    margin: 0 auto;
+  }
+
   core-header-panel {
     background: white;
     -webkit-overflow-scrolling: touch;
-  }
-
-  core-toolbar {
   }
 
   #nav {
@@ -77,10 +74,6 @@ post-list {
     -webkit-line-clamp: 2;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-  }
-
-  .content {
-    padding: 20px;
   }
 
   /* drawer is always visible on a wide screen
@@ -129,15 +122,9 @@ post-list {
         <a href="/" class="logo"><img src="/logo.png"></a>
       </div>
 
-      <!-- core-toolbar id="navheader'">
-      <span>Menu</span>
-    </core-toolbar -->
-
     <menu-list show="all"></menu-list>
 
     <hr/>
-
-
 
   </core-header-panel>
 
@@ -150,12 +137,12 @@ post-list {
       <paper-icon-button icon="favorite"></paper-icon-button>
       <div id="postDescription" class="middle indent" >
       </div>
-      <!-- div class="bottom indent">Bottom Title</div -->
     </core-toolbar>
-    
-    
+
+    <div fit>
       <post-list></post-list>
-    
+    </div>
+
   </core-header-panel>
 
 </core-drawer-panel>
@@ -182,6 +169,15 @@ function retrieveList(data){
   var postList = document.querySelector('post-list');
   postList.retrieve(data.channelId);
 
+}
+
+function mainScrollEventHandler(idx, ridx){
+  if ( idx >= 1) {
+
+  }else{
+
+  }
+  console.log(idx, ridx);
 }
 
 </script>

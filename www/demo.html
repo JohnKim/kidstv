@@ -1,269 +1,218 @@
-
 <!doctype html>
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
 <head>
-  <title>core-list</title>
+  <title>Kids TV</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <script src="bower_components/platform/platform.js"></script>
 
-  <link rel="import" href="bower_components/core-list/core-list.html">
-  <style>
-    html, body {
-      margin: 0;
-      -webkit-tap-highlight-color: transparent;
-      overflow: hidden;
-    }
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="bower_components/core-menu/core-menu.html">
+  <link rel="import" href="bower_components/core-item/core-item.html">
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="bower_components/core-drawer-panel/core-drawer-panel.html">
+  <link rel="import" href="bower_components/core-icons/core-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="elements/menu-list.html">
+  <link rel="import" href="elements/post-list.html">
 
-    list-test {
+  <style>
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft',Helvetica,Arial,sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+
+
+  </style>
+
+</head>
+
+<body unresolved>
+
+  <main-app></main-app>
+
+  <polymer-element name="main-app">
+  <template>
+    <style>
+    post-list {
       display: block;
       height: 100%;
       margin: 0 auto;
     }
 
-    .stuff {
-      min-height: 60px;
-      background: red !important;
-      border-bottom: 1px solid black;
+    core-header-panel {
+      background: white;
+      -webkit-overflow-scrolling: touch;
     }
-  </style>
-</head>
-<body fit>
-<core-toolbar id="mainheader">
-      <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
-      <span id="postTitle" flex>asasasasasasas</span>
-      <paper-icon-button icon="refresh"></paper-icon-button>
-      <paper-icon-button icon="favorite"></paper-icon-button>
-      <!-- div id="postDescription" class="middle indent" >
-      </div -->
-      <!-- div class="bottom indent">Bottom Title</div -->
-    </core-toolbar>
-<list-test></list-test>
 
-<polymer-element name="list-test" layout vertical>
-<template>
-  <style>
-    .item {
-      box-sizing: border-box;
-      height: 80px;
-      border-bottom: 1px solid #ddd;
-      padding: 4px;
-      cursor: default;
-      background-color: white;
+    #nav {
+      background-color: #EEE;
+      color: #444;
+    }
+    #navheader {
+      background-color: #EEE;
+      color: #444;
+    }
+
+    #mainheader {
+      background-color: #3e50b4 !important;
+      color: #fff;
+    }
+    #mainheader .middle {
+      font-size: 16px;
+    }
+    #mainheader .bottom {
+      font-size: 12px;
+    }
+
+    #postDescription {
+      display: none;
+
+    }
+
+    .medium-tall #postDescription {
+      text-overflow: ellipsis;
       overflow: hidden;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
 
-    .selected {
-      background: silver;
+    /* drawer is always visible on a wide screen
+    so menu button isn't required */
+    :host:not([narrow]) #navicon {
+      display: none;
     }
 
-    .message {
-      padding-left: 77px;
-      line-height: 167%;
-      background-repeat: no-repeat;
-      background-position: 10px 10px;
-      background-size: 60px;
+
+    #logo-container {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: -o-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      -o-align-items: center;
+      align-items: center;
+      height: 80px;
+      margin-bottom: 24px;
+      padding-top: 16px;
+      padding-left: 16px;
+      padding-right: 16px;
+      max-width: 100%;
     }
 
-    .from {
-      display: inline;
-      font-weight: bold;
+    #logo-container img{
+      max-width: 100%;
     }
 
-    .timestamp {
-      margin-left: 10px;
-      font-size: 12px;
-      opacity: 0.8;
-    }
+    </style>
+    <core-drawer-panel id="drawerPanel">
 
-    .body {
-      font-size: 12px;
-    }
+      <core-header-panel drawer id='nav'>
 
-    .spaced {
-      margin: 10px;
-    }
-
-    .selection-display {
-      background: lightgray;
-      padding: 0 5px;
-      margin: 0 5px;
-    }
-
-    .narrow {
-      width: 40px;
-    }
-
-  </style>
-
-  <div class="spaced">
-    <button on-tap="{{addRecord}}">Add row at index:</button>
-    <input value="{{addIdx}}" class="narrow" type="number">
-    <br>
-    <button on-tap="{{deleteRecord}}">Delete row at index:</button>
-    <input value="{{deleteIdx}}" class="narrow" type="number">
-    <br>
-    <button on-tap="{{deleteAll}}">Delete all</button>
-    <button on-tap="{{deleteArray}}">Delete data array</button>
-    <button on-tap="{{initArrayEmpty}}">Init empty array</button>
-    <button on-tap="{{initArrayFull}}">Init full array</button>
-    <br>
-    <label><input type="checkbox" checked="{{selectionEnabled}}">Selection enabled</label>
-    <label><input type="checkbox" checked="{{multi}}">Multiple selection</label>
-    <br>
-    <button on-tap="{{clearSelection}}">Clear selection</button>
-    <button on-tap="{{deleteSelection}}">Delete selection</button>
-  </div>
-  <div layout horizontal wrap class="spaced">
-    Selected values:
-    <template repeat="{{multi ? selection: [selection]}}">
-      <div class="selection-display">Id {{id}}: {{checked}} {{value}} {{['a','b','c'][type]}}</div>
-    </template>
-  </div>
-  <core-list id="list" data="{{data}}" selectionEnabled="{{selectionEnabled}}"
-    selection="{{selection}}" height="80" flex multi?={{multi}} on-scroll="{{scrollHandler2}}">
-    <template>
-      <div class="item {{ {selected: selected} | tokenList }}">
-        <div id="idx_{{index}}" class="message" style="background-image: url(images/{{model.image}}.png);">
-          <span class="from">{{model.name}}</span>
-          <div class="subject">Row: {{index}}, Record ID: {{model.id}}</div>
-          <input type="checkbox" checked="{{model.checked}}">
-          <input type="number" value="{{model.value}}" class="narrow">
-          <select selectedIndex="{{model.type}}"><option>a</option><option>b</option><option>c</option></select>
-          <span class="body">{{model.details}}</span>
+        <div id="logo-container" layout="" horizontal="" center="">
+          <a href="/" class="logo"><img src="/logo.png"></a>
         </div>
-      </div>
-    </template>
 
-  </core-list>
-asdfasdfasd
-</template>
-<script>
-(function() {
-  var strings = [
-    "PARKOUR!",
-    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-  ];
+        <menu-list show="all"></menu-list>
 
-  var namegen = {
-    generateString: function(inLength) {
-      var s = '';
-      for (var i=0; i<inLength; i++) {
-        s += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+        <hr/>
+
+      </core-header-panel>
+
+      <core-header-panel main mode="waterfall-tall" tallClass="medium-tall">
+
+        <core-toolbar id="mainheader">
+          <paper-icon-button id="navicon" icon="menu" on-tap="{{clickMenuBtn}}"></paper-icon-button>
+          <span id="postTitle" flex></span>
+          <paper-icon-button icon="refresh"></paper-icon-button>
+          <paper-icon-button icon="favorite"></paper-icon-button>
+          <div id="postDescription" class="middle indent" >
+          </div>
+        </core-toolbar>
+
+        <div fit>
+          <post-list></post-list>
+        </div>
+
+      </core-header-panel>
+
+    </core-drawer-panel>
+  </template>
+  <script>
+
+  (function() {
+
+
+
+    Polymer('main-app', {
+      ready: function() {
+        console.log('READY');
+      },
+      clickMenuBtn: function(){
+        this.$.drawerPanel.togglePanel();
+      },
+      retrieveList: function(data){
+
+        this.$.postTitle.innerHTML = data.title;
+        this.$.postDescription.innerHTML = data.description;
+
+        this.$.drawerPanel.togglePanel();
+
+        var postList = document.querySelector('post-list');
+        postList.retrieve(data.channelId);
+
       }
-      return s;
-    },
-    generateName: function(inMin, inMax) {
-      return this.generateString(Math.floor(Math.random() * (inMax - inMin + 1) + inMin));
+    });
+  })();
+
+
+document.addEventListener('polymer-ready', function() {
+
+
+
+});
+
+
+  function retrieveLidst(data){
+
+    document.getElementById('postTitle').innerHTML = data.title;
+    document.getElementById('postDescription').innerHTML = data.description;
+
+    var drawerPanel = document.getElementById('drawerPanel');
+    drawerPanel.togglePanel();
+
+    var postList = document.querySelector('post-list');
+    postList.retrieve(data.channelId);
+
+  }
+
+  function mainScrollEventHandler(idx, ridx){
+    if ( idx >= 1) {
+
+    }else{
+
     }
-  };
+    console.log(idx, ridx);
+  }
 
-  Polymer('list-test', {
-    addIdx: 0,
-    deleteIdx: 0,
-    count: 100,
-    scrollHandler2: function(e, detail){
-
-      //console.log(this.$.list._scrollTop, this.$.list.baseVirtualIndex, this.$.list._visibleCount, this.$.list._physicalCount, this.$.list.firstPhysicalIndex);
-      var firstVisibleIndex = Math.floor(this.$.list._scrollTop / this.$.list.height);
-       var visibleMidpoint = firstVisibleIndex + this.$.list._visibleCount / 2;
-      console.log(firstVisibleIndex, visibleMidpoint, Math.max(0, Math.floor(visibleMidpoint - this.$.list._physicalCount / 2)));
-
-      if(visibleMidpoint > 90 && visibleMidpoint < 100){
-        this.addRecord2(100);
-      }
-    },
-    ready: function() {
-      this.initArrayFull();
-    },
-    generateData: function() {
-      var names = [], data = [];
-      for (var i=0; i<this.count; i++) {
-        names.push(namegen.generateName(4, 8));
-      }
-      names.sort();
-      for (i=0; i<this.count; i++) {
-        data.push({
-          id: i,
-          name: names[i],
-          details: strings[i % 3],
-          image: i % 4,
-          value: 0,
-          type: 0,
-          checked: false
-        });
-      }
-      return data;
-    },
-    addRecord2: function(nn) {
-      for (i=0; i<nn; i++) {
-      this.data.splice(this.addIdx, 0, {
-        id: ++this.count,
-        name: namegen.generateName(4, 8),
-        details: strings[this.count % 3],
-        image: this.count % 4,
-        value: 0,
-        type: 0,
-        checked: false
-      });
-      }
-    },
-    addRecord: function() {
-      this.data.splice(this.addIdx, 0, {
-        id: ++this.count,
-        name: namegen.generateName(4, 8),
-        details: strings[this.count % 3],
-        image: this.count % 4,
-        value: 0,
-        type: 0,
-        checked: false
-      });
-    },
-    deleteRecord: function() {
-      this.data.splice(this.deleteIdx, 1);
-    },
-    deleteSelection: function() {
-      var i, idx;
-      if (this.multi) {
-        if (this.selection.length) {
-          for (i=0; i<this.selection.length; i++) {
-            idx = this.data.indexOf(this.selection[i]);
-            this.data.splice(idx, 1);
-          }
-        }
-      } else {
-        idx = this.data.indexOf(this.selection);
-        this.data.splice(idx, 1);
-      }
-    },
-    clearSelection: function() {
-      this.$.list.clearSelection();
-    },
-    deleteAll: function() {
-      this.data.splice(0,this.data.length);
-      // this.data.length = 0;
-    },
-    deleteArray: function() {
-      this.data = null;
-    },
-    initArrayEmpty: function() {
-      this.data = [];
-    },
-    initArrayFull: function() {
-      this.data = this.generateData();
-    }
-  });
-})();
-</script>
-</polymer-element>
+  </script>
+  </polymer-element>
 
 </body>
 </html>
